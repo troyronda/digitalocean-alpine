@@ -5,7 +5,7 @@ This guide instructs you on how to put [Alpine Linux](http://alpinelinux.org/) o
 ## Requirements
 
 - Digital Ocean account
-- Docker (used to generate the Alpine root filesystem)
+- Local Docker installation (used to generate the Alpine root filesystem)
 
 ## Process
 
