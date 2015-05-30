@@ -55,7 +55,7 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `cp -r /mnt/root/.ssh /mnt/alpine/root/`
     - `cp /mnt/etc/fstab /mnt/alpine/etc/`
     - `cp -r /mnt/alpine /tmp/`
-    - `rm -rf /mnt/*
+    - `rm -rf /mnt/*`
     - `cp -r /tmp/alpine/* /mnt/`
     - `umount /mnt/`
     - `poweroff`
