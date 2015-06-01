@@ -1,4 +1,4 @@
-# Digital Ocean Debian to Alpine Linux
+# Digital Ocean: Alpine Linux
 
 This guide instructs you on how to put [Alpine Linux](http://alpinelinux.org/) on a [Digital Ocean](https://www.digitalocean.com/?refcode=a0f96edad652) (referral link) droplet.
 
