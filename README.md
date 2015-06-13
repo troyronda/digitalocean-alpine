@@ -73,13 +73,13 @@ You should now have `rootfs.tar.gz` in your current directory.
     - Set the 4th column to `defaults`
     - Save and exit.
 4. Configure networking and SSH.
-    - `apk update`
-    - `setup-dns`
     - `setup-hostname`
+    - `setup-dns`
+    - `service networking restart`
+    - `apk update`
+    - `setup-sshd`
     - `rc-update add hostname boot`
     - `rc-update add networking boot`
-    - `service networking start`
-    - `setup-sshd`
 5. Enable services.
     - `rc-update add urandom boot`
     - `rc-update add cron`
