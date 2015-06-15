@@ -51,12 +51,12 @@ You should now have `rootfs.tar.gz` in your current directory.
 5. In the recovery console, run the following commands:
     - `mkdir /mnt`
     - `mount -t ext4 /dev/vda1 /mnt`
-    - `cp /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
-    - `cp -r /mnt/root/.ssh /mnt/alpine/root/`
-    - `cp /mnt/etc/fstab /mnt/alpine/etc/`
-    - `cp -r /mnt/alpine /tmp/`
+    - `cp -p /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
+    - `cp -pr /mnt/root/.ssh /mnt/alpine/root/`
+    - `cp -p /mnt/etc/fstab /mnt/alpine/etc/`
+    - `cp -pr /mnt/alpine /tmp/`
     - `rm -rf /mnt/*`
-    - `cp -r /tmp/alpine/* /mnt/`
+    - `cp -pr /tmp/alpine/* /mnt/`
     - `umount /mnt/`
     - `poweroff`
 6. Click "Back to Droplet".
@@ -68,7 +68,7 @@ You should now have `rootfs.tar.gz` in your current directory.
 1. Re-open "Console Access".
 2. Login as `root`.
 3. Enable writing to the file system.
-    - `mount -o rw -o remount /dev/vda1 /`
+    - `mount -o rw,remount /dev/vda1 /`
     - `vi /etc/fstab`
     - Set the 4th column to `defaults`
     - Save and exit.
