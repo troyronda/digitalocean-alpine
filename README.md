@@ -37,7 +37,7 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `scp rootfs.tar.gz root@<IP address>:`
 3. SSH into the droplet.
     - `ssh root@<IP address>`
-4. Inside the droplet, run the following commands:
+4. Inside the droplet, extract the Alpine files onto your hard drive.
     - `mkdir /alpine`
     - `tar xf rootfs.tar.gz -C /alpine`
     - `poweroff`
@@ -48,11 +48,11 @@ You should now have `rootfs.tar.gz` in your current directory.
 2. Under the "Recovery" tab, click "Mount Recovery Kernel".
 3. Under "Power", click "Power On".
 4. Under "Access", click "Console Access".
-5. In the recovery console, run the following commands:
+5. In the recovery console, move the extracted Alpine files into the root of your drive.
     - `mkdir /mnt`
     - `mount -t ext4 /dev/vda1 /mnt`
-    - `cp -p /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
-    - `cp -pr /mnt/root/.ssh /mnt/alpine/root/`
+    - `mv /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
+    - `mv /mnt/root/.ssh /mnt/alpine/root/`
     - `cp -p /mnt/etc/fstab /mnt/alpine/etc/`
     - `cp -pr /mnt/alpine /tmp/`
     - `rm -rf /mnt/*`
@@ -78,9 +78,9 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `service networking restart`
     - `apk update`
     - `setup-sshd`
+5. Enable services.
     - `rc-update add hostname boot`
     - `rc-update add networking boot`
-5. Enable services.
     - `rc-update add urandom boot`
     - `rc-update add cron`
     - `rc-update add swap boot`
