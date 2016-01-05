@@ -60,8 +60,9 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `umount /mnt/`
     - `poweroff`
 6. Click "Back to Droplet".
-7. Under "Settings", click "Kernel" tab, then "Change".
-8. Under "Power", click "Power On".
+7. Under "Settings", click "Kernel" tab.
+8. Select "Original Kernel", then click "Change".
+9. Under "Power", click "Power On".
 
 ### Configuring Alpine
 
