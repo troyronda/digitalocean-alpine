@@ -17,8 +17,8 @@ This guide instructs you on how to put [Alpine Linux](http://alpinelinux.org/) o
     - `unzip docker-alpine-master.zip`
 3. Build the builder.
     - `docker build -t docker-alpine-builder docker-alpine-master/builder/`
-4. Build the root file system (change `v3.2` to the Alpine version you want to build).
-    - `docker run --name alpine-builder docker-alpine-builder -r v3.2`
+4. Build the root file system (change `v3.3` to the Alpine version you want to build).
+    - `docker run --name alpine-builder docker-alpine-builder -r v3.3`
 5. Copy the root file system from the container.
     - `docker cp alpine-builder:/rootfs.tar.gz .`
 6. (Optional) Clean up builder.
