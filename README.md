@@ -52,11 +52,11 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `mkdir /mnt`
     - `mount -t ext4 /dev/vda1 /mnt`
     - `mv /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
-    - `mv /mnt/root/.ssh /mnt/alpine/root/`
-    - `cp -p /mnt/etc/fstab /mnt/alpine/etc/`
-    - `cp -pr /mnt/alpine /tmp/`
+    - `mv /mnt/root/.ssh/ /mnt/alpine/root/`
+    - `mv /mnt/etc/fstab /mnt/alpine/etc/`
+    - `mv /mnt/alpine/ /tmp/`
     - `rm -rf /mnt/*`
-    - `cp -pr /tmp/alpine/* /mnt/`
+    - `mv /tmp/alpine/* /mnt/`
     - `umount /mnt/`
     - `poweroff`
 6. Click "Back to Droplet".
