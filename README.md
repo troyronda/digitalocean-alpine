@@ -11,7 +11,7 @@ This guide instructs you on how to put [Alpine Linux](http://alpinelinux.org/) o
 
 ### Generate Alpine root file system
 
-1. Ensure Docker is running.
+1. Ensure Docker is running locally.
 2. Download and unzip [`gliderlabs/docker-alpine`](https://github.com/gliderlabs/docker-alpine).
     - `wget -O docker-alpine-master.zip https://github.com/gliderlabs/docker-alpine/archive/master.zip`
     - `unzip docker-alpine-master.zip`
