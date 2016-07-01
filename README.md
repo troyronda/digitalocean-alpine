@@ -32,7 +32,7 @@ You should now have `rootfs.tar.gz` in your current directory.
 
 1. Create droplet.
     - In your Digital Ocean control panel, click "Create Droplet".
-    - Fill in your information, select the "Debian 7.9 x64" image, and click "Create Droplet".
+    - Fill in your information, select the "Debian 7.10 x64" image, and click "Create Droplet".
 2. Transfer `rootfs.tar.gz` to the droplet.
     - `scp rootfs.tar.gz root@<IP address>:`
 3. SSH into the droplet.
