@@ -58,7 +58,6 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `mv /mnt/alpine/ /tmp/`
     - `rm -rf /mnt/*`
     - `mv /tmp/alpine/* /mnt/`
-    - `umount /mnt/`
     - `poweroff`
 6. Close the recovery console.
 7. Select a kernel (e.g. search for "3.2.0-4-amd64"), then click "Change".
