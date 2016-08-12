@@ -53,6 +53,7 @@ You should now have `rootfs.tar.gz` in your current directory.
     - `mount -t ext4 /dev/vda1 /mnt`
     - `mv /mnt/etc/network/interfaces /mnt/alpine/etc/network/`
     - `mv /mnt/root/.ssh/ /mnt/alpine/root/`
+    - `mv /mnt/etc/hostname /mnt/alpine/etc/`
     - `mv /mnt/etc/fstab /mnt/alpine/etc/`
     - `mv /mnt/alpine/ /tmp/`
     - `rm -rf /mnt/*`
@@ -73,7 +74,6 @@ You should now have `rootfs.tar.gz` in your current directory.
     - Set the 4th column (options) of the `/` mount point to `defaults`
     - Save and exit.
 4. Configure networking and SSH.
-    - `setup-hostname`
     - `setup-dns`
     - `service networking restart`
     - `apk update`
