@@ -4,58 +4,88 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 if [ "$1" = "--step-chroot" ]; then
-	echo -n "  Installing packages..." >&2
-	apk update >/dev/null 2>&1
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs >/dev/null 2>/dev/null
+
+	echo -n "  Adding Digital Ocean init script..." >&2
+	cat <<EOF > /etc/init.d/digitalocean
+#!/sbin/openrc-run
+
+description="Loads Digital Ocean droplet configuration"
+
+required_files="/media/cdrom/digitalocean_meta_data.json"
+
+depend() {
+	need localmount
+	before network
+	before hostname
+}
+
+start() {
+	ebegin "Loading Digital Ocean configuration"
+	if ! which jq >/dev/null 2>&1; then
+		eend 1 "jq is not installed"
+	fi
+
+	hostname="\$(jq -jre '.hostname' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	if [ \$? -eq 0 ]; then
+		echo "\$hostname" > /etc/hostname
+	else
+		ewarn "Could not read hostname"
+	fi
+
+	f="/etc/network/interfaces"
+
+	echo "auto lo" > "\$f"
+	echo "iface lo inet loopback" >> "\$f"
+
+	ip_addr="\$(jq -jre '.interfaces.public[0].ipv4.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_netmask="\$(jq -jre '.interfaces.public[0].ipv4.netmask' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv4.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+
+	echo >> "\$f"
+	echo "auto eth0" >> "\$f"
+	echo "iface eth0 inet static" >> "\$f"
+	echo "	address \$ip_addr" >> "\$f"
+	echo "	netmask \$ip_netmask" >> "\$f"
+	echo "	gateway \$ip_gateway" >> "\$f"
+
+	ip_addr="\$(jq -jre '.interfaces.public[0].ipv6.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_cidr="\$(jq -jre '.interfaces.public[0].ipv6.cidr' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv6.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+
+	if [ -n "\$id_addr" ]; then
+		modprobe ipv6
+
+		echo >> "\$f"
+		echo "iface eth0 inet6 static" >> "\$f"
+		echo "	address \$id_addr" >> "\$f"
+		echo "	netmask \$ip_cidr" >> "\$f"
+		echo "	gateway \$ip_gateway" >> "\$f"
+		echo "	pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/accept_ra" >> "\$f"
+	fi
+
+	ip_addr="\$(jq -jre '.interfaces.private[0].ipv4.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_netmask="\$(jq -jre '.interfaces.private[0].ipv4.netmask' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+
+	if [ -n "\$ip_addr" ]; then
+		echo >> "\$f"
+		echo "auto eth1" >> "\$f"
+		echo "iface eth1 inet static" >> "\$f"
+		echo "	address \$ip_addr" >> "\$f"
+		echo "	netmask \$ip_netmask" >> "\$f"
+	fi
+
+	eend 0
+}
+EOF
+	chmod +x /etc/init.d/digitalocean
 	echo " Done" >&2
 
-	echo -n "  Configuring network and services..." >&2
-	IP_ADDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
-	IP_NETMASK=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/netmask)
-	IP_GATEWAY=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/gateway)
+	echo -n "  Installing packages..." >&2
+	apk update >/dev/null 2>&1
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq >/dev/null 2>&1
+	echo " Done" >&2
 
-	cat <<EOF > /etc/network/interfaces
-auto lo
-iface lo inet loopback
-
-auto eth0
-iface eth0 inet static
-    address $IP_ADDR
-    netmask $IP_NETMASK
-    gateway $IP_GATEWAY
-EOF
-
-	IP_ADDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/address 2>/dev/null)
-	HAS_IPv6=$?
-	IP_CIDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/cidr 2>/dev/null)
-	IP_GATEWAY=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/gateway 2>/dev/null)
-
-	if [ "$HAS_IPv6" -eq 0 ]; then
-		echo "ipv6" >> /etc/modules
-		cat <<EOF >> /etc/network/interfaces
-
-iface eth0 inet6 static
-    address $ID_ADDR
-    netmask $IP_CIDR
-    gateway $IP_GATEWAY
-    pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/accept_ra
-EOF
-	fi
-
-	IP_ADDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address 2>/dev/null)
-	HAS_PRIVATE=$?
-	IP_NETMASK=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/netmask 2>/dev/null)
-
-	if [ "$HAS_PRIVATE" -eq 0 ]; then
-		cat <<EOF >> /etc/network/interfaces
-
-auto eth1
-iface eth1 inet static
-    address $IP_ADDR
-    netmask $IP_NETMASK
-EOF
-	fi
-
+	echo -n "  Configuring services..." >&2
 	setup-sshd -c openssh >/dev/null 2>&1
 
 	rc-update add --quiet hostname boot
@@ -63,10 +93,13 @@ EOF
 	rc-update add --quiet urandom boot
 	rc-update add --quiet crond default
 	rc-update add --quiet swap boot
+	rc-update add --quiet digitalocean boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
 
 	sed -i -r -e 's/^(tty[2-6]:)/#\1/' /etc/inittab
+
+	echo "/dev/vdb	/media/cdrom	iso9660	ro	0	0" >> /etc/fstab
 
 	echo " Done" >&2
 
