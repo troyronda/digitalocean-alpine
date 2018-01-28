@@ -63,6 +63,9 @@ EOF
 	rc-update add urandom boot >/dev/null 2>/dev/null
 	rc-update add crond default >/dev/null 2>/dev/null
 	rc-update add swap boot >/dev/null 2>/dev/null
+
+	sed -i -r -e 's/^(tty[2-6]:)/#\1/' /etc/inittab
+
 	echo " Done" >&2
 
 	echo -n "  Installing bootloader..." >&2
