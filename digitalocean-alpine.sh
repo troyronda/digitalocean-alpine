@@ -5,7 +5,7 @@
 
 if [ "$1" = "--step-chroot" ]; then
 	echo -n "  Installing packages..." >&2
-	apk update >/dev/null 2>/dev/null
+	apk update >/dev/null 2>&1
 	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs >/dev/null 2>/dev/null
 	echo " Done" >&2
 
@@ -56,13 +56,13 @@ iface eth1 inet static
 EOF
 	fi
 
-	setup-sshd -c openssh >/dev/null 2>/dev/null || true
+	setup-sshd -c openssh >/dev/null 2>&1
 
-	rc-update add hostname boot >/dev/null 2>/dev/null
-	rc-update add networking boot >/dev/null 2>/dev/null
-	rc-update add urandom boot >/dev/null 2>/dev/null
-	rc-update add crond default >/dev/null 2>/dev/null
-	rc-update add swap boot >/dev/null 2>/dev/null
+	rc-update add --quiet hostname boot
+	rc-update add --quiet networking boot
+	rc-update add --quiet urandom boot
+	rc-update add --quiet crond
+	rc-update add --quiet swap boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
 
@@ -72,8 +72,8 @@ EOF
 
 	echo -n "  Installing bootloader..." >&2
 
-	grub-install /dev/vda >/dev/null 2>/dev/null
-	grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>/dev/null
+	grub-install /dev/vda >/dev/null 2>&1
+	grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1
 
 	sync
 	echo " Done" >&2
@@ -88,7 +88,7 @@ if [ "$1" != "--rebuild" ]; then
 	echo "   Rebuild the current droplet with Alpine Linux" >&2
 	echo >&2
 	echo "   WARNING: This is a destructive operation. You will lose your data." >&2
-	echo "            This script has only been tested with Debian 9.3 x64 droplets" >&2
+	echo "            This script has only been tested with Debian 9.3 x64 droplets." >&2
 	exit 1
 fi
 
