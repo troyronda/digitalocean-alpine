@@ -113,6 +113,7 @@ fi
 echo " Done" >&2
 
 echo -n "Creating mount points..." >&2
+umount -a >/dev/null 2>&1
 mount -o rw,remount --make-rprivate /dev/vda1 /
 mkdir /tmp/tmpalpine
 mount none /tmp/tmpalpine -t tmpfs
