@@ -3,8 +3,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-set -e
-
 if [ "$1" = "--step-chroot" ]; then
 	echo -n "  Installing packages..." >&2
 	apk update >/dev/null 2>/dev/null
@@ -26,6 +24,37 @@ iface eth0 inet static
     netmask $IP_NETMASK
     gateway $IP_GATEWAY
 EOF
+
+	IP_ADDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/address 2>/dev/null)
+	HAS_IPv6=$?
+	IP_CIDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/cidr 2>/dev/null)
+	IP_GATEWAY=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/gateway 2>/dev/null)
+
+	if [ "$HAS_IPv6" -eq 0 ]; then
+		echo "ipv6" >> /etc/modules
+		cat <<EOF >> /etc/network/interfaces
+
+iface eth0 inet6 static
+    address $ID_ADDR
+    netmask $IP_CIDR
+    gateway $IP_GATEWAY
+    pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/accept_ra
+EOF
+	fi
+
+	IP_ADDR=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address 2>/dev/null)
+	HAS_PRIVATE=$?
+	IP_NETMASK=$(wget -q -O- http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/netmask 2>/dev/null)
+
+	if [ "$HAS_PRIVATE" -eq 0 ]; then
+		cat <<EOF >> /etc/network/interfaces
+
+auto eth1
+iface eth1 inet static
+    address $IP_ADDR
+    netmask $IP_NETMASK
+EOF
+	fi
 
 	setup-sshd -c openssh >/dev/null 2>/dev/null || true
 
