@@ -65,18 +65,7 @@ EOF
 	rc-update add swap boot >/dev/null 2>/dev/null
 	echo " Done" >&2
 
-	echo -n "  Configuring bootloader..." >&2
-	sed -i -e 's/^root=.*$/root=\/dev\/vda1/' /etc/update-extlinux.conf
-
-	DRIVE_UUID=$(blkid -o value -s UUID /dev/vda1)
-
-	cat <<EOF >> /etc/grub.d/40_custom
-menuentry "Alpine Linux" {
-    set root=(hd0,1)
-    linux /boot/vmlinuz root=UUID=$DRIVE_UUID modules=ext4 quiet
-    initrd /boot/initramfs-vanilla
-}
-EOF
+	echo -n "  Installing bootloader..." >&2
 
 	grub-install /dev/vda >/dev/null 2>/dev/null
 	grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>/dev/null
