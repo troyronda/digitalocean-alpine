@@ -87,6 +87,11 @@ if [ "$1" != "--rebuild" ]; then
 	exit 1
 fi
 
+if [ "$(id -u)" -ne "0" ]; then
+	echo "digitalocean-alpine: script must be run as root" >&2
+	exit 1
+fi
+
 SCRIPTPATH="$(realpath "$0")"
 
 if [ \! -x "$SCRIPTPATH" ]; then
