@@ -89,6 +89,11 @@ fi
 
 SCRIPTPATH="$(realpath "$0")"
 
+if [ \! -x "$SCRIPTPATH" ]; then
+	echo "digitalocean-alpine: script must be executable" >&2
+	exit 1
+fi
+
 echo -n "Downloading Alpine 3.7.0..." >&2
 wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/alpine-minirootfs-3.7.0-x86_64.tar.gz
 echo " Done" >&2
