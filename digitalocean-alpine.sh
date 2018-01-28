@@ -61,7 +61,7 @@ EOF
 	rc-update add --quiet hostname boot
 	rc-update add --quiet networking boot
 	rc-update add --quiet urandom boot
-	rc-update add --quiet crond
+	rc-update add --quiet crond default
 	rc-update add --quiet swap boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
