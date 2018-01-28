@@ -6,7 +6,7 @@
 if [ "$1" = "--step-chroot" ]; then
 	echo -n "  Installing packages..." >&2
 	apk update >/dev/null 2>/dev/null
-	apk add alpine-base linux-virthardened syslinux grub grub-bios >/dev/null 2>/dev/null
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs >/dev/null 2>/dev/null
 	echo " Done" >&2
 
 	echo -n "  Configuring network and services..." >&2
