@@ -82,7 +82,7 @@ EOF
 
 	echo -n "  Installing packages..." >&2
 	apk update >/dev/null 2>&1
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq >/dev/null 2>&1
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq eudev >/dev/null 2>&1
 	echo " Done" >&2
 
 	echo -n "  Configuring services..." >&2
@@ -93,6 +93,8 @@ EOF
 	rc-update add --quiet urandom boot
 	rc-update add --quiet crond default
 	rc-update add --quiet swap boot
+	rc-update add --quiet udev sysinit
+	rc-update add --quiet udev-trigger sysinit
 	rc-update add --quiet digitalocean boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
