@@ -52,12 +52,12 @@ start() {
 	ip_cidr="\$(jq -jre '.interfaces.public[0].ipv6.cidr' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
 	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv6.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
 
-	if [ -n "\$id_addr" ]; then
+	if [ -n "\$ip_addr" ]; then
 		modprobe ipv6
 
 		echo >> "\$f"
 		echo "iface eth0 inet6 static" >> "\$f"
-		echo "	address \$id_addr" >> "\$f"
+		echo "	address \$ip_addr" >> "\$f"
 		echo "	netmask \$ip_cidr" >> "\$f"
 		echo "	gateway \$ip_gateway" >> "\$f"
 		echo "	pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/accept_ra" >> "\$f"
