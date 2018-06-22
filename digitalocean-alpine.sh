@@ -142,10 +142,18 @@ fi
 echo -n "Downloading Alpine 3.7.0..." >&2
 wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/alpine-minirootfs-3.7.0-x86_64.tar.gz
 if [ "$?" -ne 0 ]; then
-	echo "Could not download Alpine. Exiting." >&2
+	echo " Failed!" >&2
 	exit 1
 fi
 echo " Done" >&2
+
+echo -n "Verifying SHA256 checksum..." >&1
+echo "17e8275545aca7a6eaf4e43759a091d33bd9eb9cf11805118773dc940c8b94ac  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
+if [ "$?" -ne 0 ]; then
+	echo " Failed!" >&2
+	exit 1
+fi
+echo " OK" >&2
 
 echo -n "Creating mount points..." >&2
 umount -a >/dev/null 2>&1
