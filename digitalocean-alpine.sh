@@ -49,10 +49,11 @@ start() {
 	echo "	gateway \$ip_gateway" >> "\$f"
 
 	ip_addr="\$(jq -jre '.interfaces.public[0].ipv6.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_error=\$?
 	ip_cidr="\$(jq -jre '.interfaces.public[0].ipv6.cidr' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
 	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv6.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
 
-	if [ -n "\$ip_addr" ]; then
+	if [ \$ip_error -eq 0 -a -n "\$ip_addr" ]; then
 		modprobe ipv6
 
 		echo >> "\$f"
@@ -64,9 +65,10 @@ start() {
 	fi
 
 	ip_addr="\$(jq -jre '.interfaces.private[0].ipv4.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
+	ip_error=\$?
 	ip_netmask="\$(jq -jre '.interfaces.private[0].ipv4.netmask' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
 
-	if [ -n "\$ip_addr" ]; then
+	if [ \$ip_error -eq 0 -a -n "\$ip_addr" ]; then
 		echo >> "\$f"
 		echo "auto eth1" >> "\$f"
 		echo "iface eth1 inet static" >> "\$f"
