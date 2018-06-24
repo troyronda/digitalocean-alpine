@@ -149,7 +149,7 @@ if [ "$?" -ne 0 ]; then
 fi
 echo " Done" >&2
 
-echo -n "Verifying SHA256 checksum..." >&1
+echo -n "Verifying SHA256 checksum..." >&2
 echo "17e8275545aca7a6eaf4e43759a091d33bd9eb9cf11805118773dc940c8b94ac  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
 if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
