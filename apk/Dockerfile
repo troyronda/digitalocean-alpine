@@ -25,4 +25,4 @@ COPY src/* /home/build/digitalocean-alpine
 RUN chown -R build:build /home/build
 
 WORKDIR /home/build/digitalocean-alpine
-CMD su build -- /usr/bin/abuild
+CMD su build -- /usr/bin/abuild checksum && su build -- /usr/bin/abuild

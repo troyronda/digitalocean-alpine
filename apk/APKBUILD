@@ -13,5 +13,3 @@ package() {
 	cd "$srcdir"
 	install -Dm755 digitalocean "$pkgdir"/etc/init.d/digitalocean
 }
-
-sha512sums="f750ce261fea429ede451dfdcfe669e723760fff0e63255a6f18ff541fa836b79f8d124d485f99e13186be5693a7a68f79be332fbacfda99c259d8ee57270fde  digitalocean"
