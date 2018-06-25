@@ -5,7 +5,7 @@ ARG publickey
 
 RUN test -n "$privatekey" -a -n "$publickey"
 
-RUN apk --no-cache add abuild build-base
+RUN apk --no-cache add abuild build-base jq
 
 RUN adduser -D build
 RUN addgroup build abuild

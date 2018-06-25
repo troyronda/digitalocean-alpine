@@ -1,9 +1,10 @@
 # Maintainer: Tim Cooper <tim.cooper@layeh.com>
 pkgname=digitalocean-alpine
-pkgver=20180625
+pkgver=20180625.1
 pkgrel=0
 pkgdesc="Helper for Digital Ocean droplets"
 url="https://layeh.com/digitalocean-alpine"
+depends="jq"
 arch=noarch
 license=MPL-2.0
 source="digitalocean"

@@ -19,7 +19,7 @@ VwIDAQAB
 EOF
 	echo "https://cdn.layeh.com/alpine/3.7/" >> /etc/apk/repositories
 	apk update >/dev/null 2>&1
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq eudev digitalocean-alpine >/dev/null 2>&1
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs eudev digitalocean-alpine >/dev/null 2>&1
 	echo " Done" >&2
 
 	echo -n "  Configuring services..." >&2
