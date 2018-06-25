@@ -4,87 +4,22 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 if [ "$1" = "--step-chroot" ]; then
-
-	echo -n "  Adding Digital Ocean init script..." >&2
-	cat <<EOF > /etc/init.d/digitalocean
-#!/sbin/openrc-run
-
-description="Loads Digital Ocean droplet configuration"
-
-required_files="/media/cdrom/digitalocean_meta_data.json"
-
-depend() {
-	need localmount
-	before network
-	before hostname
-}
-
-start() {
-	ebegin "Loading Digital Ocean configuration"
-	if ! which jq >/dev/null 2>&1; then
-		eend 1 "jq is not installed"
-	fi
-
-	hostname="\$(jq -jre '.hostname' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	if [ \$? -eq 0 ]; then
-		echo "\$hostname" > /etc/hostname
-	else
-		ewarn "Could not read hostname"
-	fi
-
-	f="/etc/network/interfaces"
-
-	echo "auto lo" > "\$f"
-	echo "iface lo inet loopback" >> "\$f"
-
-	ip_addr="\$(jq -jre '.interfaces.public[0].ipv4.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	ip_netmask="\$(jq -jre '.interfaces.public[0].ipv4.netmask' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv4.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-
-	echo >> "\$f"
-	echo "auto eth0" >> "\$f"
-	echo "iface eth0 inet static" >> "\$f"
-	echo "	address \$ip_addr" >> "\$f"
-	echo "	netmask \$ip_netmask" >> "\$f"
-	echo "	gateway \$ip_gateway" >> "\$f"
-
-	ip_addr="\$(jq -jre '.interfaces.public[0].ipv6.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	ip_error=\$?
-	ip_cidr="\$(jq -jre '.interfaces.public[0].ipv6.cidr' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	ip_gateway="\$(jq -jre '.interfaces.public[0].ipv6.gateway' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-
-	if [ \$ip_error -eq 0 -a -n "\$ip_addr" ]; then
-		modprobe ipv6
-
-		echo >> "\$f"
-		echo "iface eth0 inet6 static" >> "\$f"
-		echo "	address \$ip_addr" >> "\$f"
-		echo "	netmask \$ip_cidr" >> "\$f"
-		echo "	gateway \$ip_gateway" >> "\$f"
-		echo "	pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/accept_ra" >> "\$f"
-	fi
-
-	ip_addr="\$(jq -jre '.interfaces.private[0].ipv4.ip_address' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-	ip_error=\$?
-	ip_netmask="\$(jq -jre '.interfaces.private[0].ipv4.netmask' /media/cdrom/digitalocean_meta_data.json 2>/dev/null)"
-
-	if [ \$ip_error -eq 0 -a -n "\$ip_addr" ]; then
-		echo >> "\$f"
-		echo "auto eth1" >> "\$f"
-		echo "iface eth1 inet static" >> "\$f"
-		echo "	address \$ip_addr" >> "\$f"
-		echo "	netmask \$ip_netmask" >> "\$f"
-	fi
-
-	eend 0
-}
-EOF
-	chmod +x /etc/init.d/digitalocean
-	echo " Done" >&2
-
 	echo -n "  Installing packages..." >&2
+
+	cat <<EOF > /etc/apk/keys/layeh.com-5b313ebb.rsa.pub
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8OZrGEUMGjd2oAkYb+qu
+rIT7k5FFS5zP6v/YwOOmbT4iQMHlkEP/Aj1PhKZt4FiirFm3fpVKjJa9uPeWRVC4
+eqZ+o9e5xm+2Sb8+Ljn617y2Yzb5kxRyE+1pOuA9WfROZdE+VNvkgcReql6tu19F
+qHj+hwCf3vNsTFeDiiyFKH4UAATR6eolKHGRqk66L3nbRlHvZbODqUcyOeUEXKp7
+ntnM2l6VIxMDHCxbZ9/cu4o/KjW2iT3802D4EWxPT3eksdZERgSVPTJrKskMzey+
+5rqLXTu2NU+V7E+UjQ6hlavc2139CQb3y4smmdpzQTnmUfg281kb9Be0KIDfcOdR
+VwIDAQAB
+-----END PUBLIC KEY-----
+EOF
+	echo "https://cdn.layeh.com/alpine/3.7/" >> /etc/apk/repositories
 	apk update >/dev/null 2>&1
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq eudev >/dev/null 2>&1
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs jq eudev digitalocean-alpine >/dev/null 2>&1
 	echo " Done" >&2
 
 	echo -n "  Configuring services..." >&2
