@@ -20,8 +20,7 @@ COPY "$publickey" /etc/apk/keys
 RUN echo PACKAGER_PRIVKEY=\"/home/build/.abuild/${privatekey}\" > /home/build/.abuild/abuild.conf
 
 RUN mkdir -p /home/build/digitalocean-alpine
-COPY APKBUILD /home/build/digitalocean-alpine
-COPY src/* /home/build/digitalocean-alpine
+COPY src/* /home/build/digitalocean-alpine/
 RUN chown -R build:build /home/build
 
 WORKDIR /home/build/digitalocean-alpine
