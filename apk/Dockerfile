@@ -1,4 +1,6 @@
-FROM alpine:3.7
+ARG alpineversion
+
+FROM alpine:${alpineversion}
 
 ARG privatekey
 ARG publickey
