@@ -3,7 +3,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+logfile="/tmp/digitalocean-alpine.log"
+
 if [ "$1" = "--step-chroot" ]; then
+	echo -n > "$logfile"
+
 	echo -n "  Installing packages..." >&2
 
 	cat <<EOF > /etc/apk/keys/layeh.com-5b313ebb.rsa.pub
@@ -18,12 +22,21 @@ VwIDAQAB
 -----END PUBLIC KEY-----
 EOF
 	echo "https://cdn.layeh.com/alpine/3.7/" >> /etc/apk/repositories
-	apk update >/dev/null 2>&1
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs eudev digitalocean-alpine >/dev/null 2>&1
+	apk update >>"$logfile" 2>>"$logfile"
+	if [ "$?" -ne 0 ]; then
+		echo
+		exit 1
+	fi
+
+	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs eudev openssh digitalocean-alpine >>"$logfile" 2>>"$logfile"
+	if [ "$?" -ne 0 ]; then
+		echo
+		exit 1
+	fi
+
 	echo " Done" >&2
 
 	echo -n "  Configuring services..." >&2
-	setup-sshd -c openssh >/dev/null 2>&1
 
 	rc-update add --quiet hostname boot
 	rc-update add --quiet networking boot
@@ -32,6 +45,7 @@ EOF
 	rc-update add --quiet swap boot
 	rc-update add --quiet udev sysinit
 	rc-update add --quiet udev-trigger sysinit
+	rc-update add --quiet sshd default
 	rc-update add --quiet digitalocean boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
@@ -44,15 +58,23 @@ EOF
 
 	echo -n "  Installing bootloader..." >&2
 
-	grub-install /dev/vda >/dev/null 2>&1
-	grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1
+	grub-install /dev/vda >>"$logfile" 2>>"$logfile"
+	if [ "$?" -ne 0 ]; then
+		echo
+		exit 1
+	fi
+	grub-mkconfig -o /boot/grub/grub.cfg >>"$logfile" 2>>"$logfile"
+	if [ "$?" -ne 0 ]; then
+		echo
+		exit 1
+	fi
 
 	sync
 	echo " Done" >&2
 
 	rm -f "$0"
 
-	exit
+	exit 0
 fi
 
 if [ "$1" != "--rebuild" ]; then
@@ -141,8 +163,12 @@ echo " Done" >&2
 
 echo "chroot configuration..." >&2
 chroot /oldroot /bin/ash /tmp/digitalocean-alpine.sh --step-chroot
+if [ "$?" -ne 0 ]; then
+	echo "ERROR: could not install Alpine Linux. See /oldroot$logfile" >&2
+	exit 1
+fi
 
-echo "Rebooting system. You should be able to reconnect shortly."  >&2
+echo "Rebooting system. You should be able to reconnect shortly." >&2
 reboot
 sleep 1
 reboot
