@@ -21,14 +21,14 @@ ntnM2l6VIxMDHCxbZ9/cu4o/KjW2iT3802D4EWxPT3eksdZERgSVPTJrKskMzey+
 VwIDAQAB
 -----END PUBLIC KEY-----
 EOF
-	echo "https://cdn.layeh.com/alpine/3.7/" >> /etc/apk/repositories
+	echo "https://cdn.layeh.com/alpine/3.8/" >> /etc/apk/repositories
 	apk update >>"$logfile" 2>>"$logfile"
 	if [ "$?" -ne 0 ]; then
 		echo
 		exit 1
 	fi
 
-	apk add alpine-base linux-virthardened syslinux grub grub-bios e2fsprogs eudev openssh digitalocean-alpine >>"$logfile" 2>>"$logfile"
+	apk add alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh digitalocean-alpine >>"$logfile" 2>>"$logfile"
 	if [ "$?" -ne 0 ]; then
 		echo
 		exit 1
@@ -98,8 +98,8 @@ if [ \! -x "$SCRIPTPATH" ]; then
 	exit 1
 fi
 
-echo -n "Downloading Alpine 3.7.0..." >&2
-wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.7/releases/x86_64/alpine-minirootfs-3.7.0-x86_64.tar.gz
+echo -n "Downloading Alpine 3.8.0..." >&2
+wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.8/releases/x86_64/alpine-minirootfs-3.8.0-x86_64.tar.gz
 if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
 	exit 1
@@ -107,7 +107,7 @@ fi
 echo " Done" >&2
 
 echo -n "Verifying SHA256 checksum..." >&2
-echo "17e8275545aca7a6eaf4e43759a091d33bd9eb9cf11805118773dc940c8b94ac  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
+echo "ae36d6ea2033131cfc649afa13d7271367c386e7a0dbd5b3d0671a2ede22a2f1  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
 if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
 	exit 1
