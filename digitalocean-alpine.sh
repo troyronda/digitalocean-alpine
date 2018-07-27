@@ -86,6 +86,11 @@ if [ "$1" != "--rebuild" ]; then
 	exit 1
 fi
 
+if [ -f /etc/alpine-release ]; then
+	echo "digitalocean-alpine: Alpine Linux already installed" >&2
+	exit 0
+fi
+
 if [ "$(id -u)" -ne "0" ]; then
 	echo "digitalocean-alpine: script must be run as root" >&2
 	exit 1
