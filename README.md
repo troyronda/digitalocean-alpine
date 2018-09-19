@@ -4,7 +4,7 @@ Script to install [Alpine Linux](https://alpinelinux.org/) on a [Digital Ocean](
 
 ## Instructions
 
-1. Create a new Debian 9.4 x64 droplet on Digital Ocean
+1. Create a new Debian 9.5 x64 droplet on Digital Ocean
 2. Download and run `digitalocean-alpine.sh` onto the droplet:
 
 ```sh
