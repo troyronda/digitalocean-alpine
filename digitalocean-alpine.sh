@@ -82,7 +82,7 @@ if [ "$1" != "--rebuild" ]; then
 	echo "   Rebuild the current droplet with Alpine Linux" >&2
 	echo >&2
 	echo "   WARNING: This is a destructive operation. You will lose your data." >&2
-	echo "            This script has only been tested with Debian 9.5 x64 droplets." >&2
+	echo "            This script has only been tested with Debian 9.6 x64 droplets." >&2
 	exit 1
 fi
 
