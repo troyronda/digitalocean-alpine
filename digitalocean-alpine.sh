@@ -28,7 +28,7 @@ EOF
 		exit 1
 	fi
 
-	apk add alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh digitalocean-alpine >>"$logfile" 2>>"$logfile"
+	apk add alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh rng-tools rng-tools-openrc digitalocean-alpine >>"$logfile" 2>>"$logfile"
 	if [ "$?" -ne 0 ]; then
 		echo
 		exit 1
@@ -47,6 +47,7 @@ EOF
 	rc-update add --quiet udev-trigger sysinit
 	rc-update add --quiet sshd default
 	rc-update add --quiet digitalocean boot
+	rc-update add --quiet rngd boot
 
 	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
 
