@@ -21,7 +21,7 @@ ntnM2l6VIxMDHCxbZ9/cu4o/KjW2iT3802D4EWxPT3eksdZERgSVPTJrKskMzey+
 VwIDAQAB
 -----END PUBLIC KEY-----
 EOF
-	echo "https://cdn.layeh.com/alpine/3.8/" >> /etc/apk/repositories
+	echo "https://cdn.layeh.com/alpine/3.9/" >> /etc/apk/repositories
 	apk update >>"$logfile" 2>>"$logfile"
 	if [ "$?" -ne 0 ]; then
 		echo
@@ -103,8 +103,8 @@ if [ \! -x "$SCRIPTPATH" ]; then
 	exit 1
 fi
 
-echo -n "Downloading Alpine 3.8.2..." >&2
-wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.8/releases/x86_64/alpine-minirootfs-3.8.2-x86_64.tar.gz
+echo -n "Downloading Alpine 3.9.0..." >&2
+wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-minirootfs-3.9.0-x86_64.tar.gz
 if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
 	exit 1
@@ -112,7 +112,7 @@ fi
 echo " Done" >&2
 
 echo -n "Verifying SHA256 checksum..." >&2
-echo "349d708d67ccbc22ffedc9eb87be539dbb64c4524756c0964187cb6a1aae27ac  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
+echo "f82efed1a80c9af86c38bed10f3541c5588453b97684d767a5a3b0f3fa0e3f09  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1
 if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
 	exit 1
