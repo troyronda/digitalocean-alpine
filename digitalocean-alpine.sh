@@ -118,7 +118,7 @@ if [ "$?" -ne 0 ]; then
 	echo " Failed!" >&2
 	exit 1
 fi
-echo " OK" >&2
+echo " Done" >&2
 
 echo -n "Creating mount points..." >&2
 umount -a >/dev/null 2>&1
