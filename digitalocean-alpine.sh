@@ -22,13 +22,8 @@ VwIDAQAB
 -----END PUBLIC KEY-----
 EOF
 	echo "https://cdn.layeh.com/alpine/3.9/" >> /etc/apk/repositories
-	apk update >>"$logfile" 2>>"$logfile"
-	if [ "$?" -ne 0 ]; then
-		echo
-		exit 1
-	fi
 
-	apk add alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh rng-tools rng-tools-openrc digitalocean-alpine >>"$logfile" 2>>"$logfile"
+	apk add --no-cache alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh rng-tools rng-tools-openrc digitalocean-alpine >>"$logfile" 2>>"$logfile"
 	if [ "$?" -ne 0 ]; then
 		echo
 		exit 1
