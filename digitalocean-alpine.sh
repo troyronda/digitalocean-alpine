@@ -43,8 +43,6 @@ EOF
 	rc-update add --quiet digitalocean boot
 	rc-update add --quiet rngd boot
 
-	sed -i -r -e 's/^UsePAM yes$/#\1/' /etc/ssh/sshd_config
-
 	sed -i -r -e 's/^(tty[2-6]:)/#\1/' /etc/inittab
 
 	echo "/dev/vdb	/media/cdrom	iso9660	ro	0	0" >> /etc/fstab
@@ -129,7 +127,8 @@ cp /etc/resolv.conf /tmp/tmpalpine/etc
 grep -v ^root: /tmp/tmpalpine/etc/shadow > /tmp/tmpalpine/etc/shadow.bak
 mv /tmp/tmpalpine/etc/shadow.bak /tmp/tmpalpine/etc/shadow
 grep ^root: /etc/shadow >> /tmp/tmpalpine/etc/shadow
-cp -r /etc/ssh /tmp/tmpalpine/etc
+mkdir -p /tmp/tmpalpine/etc/ssh
+cp -r /etc/ssh/ssh_host_* /tmp/tmpalpine/etc/ssh
 cp -r /root/.ssh /tmp/tmpalpine/root
 echo " Done" >&2
 
