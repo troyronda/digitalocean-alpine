@@ -1,6 +1,6 @@
 PRIVATE_KEY = $(wildcard *.rsa)
 PUBLIC_KEY = $(wildcard *.rsa.pub)
-ALPINE_VERSION = 3.9
+ALPINE_VERSION = 3.10
 
 repository:
 	docker build --build-arg privatekey=$(PRIVATE_KEY) --build-arg publickey=$(PUBLIC_KEY) --build-arg alpineversion=$(ALPINE_VERSION) -t digitalocean-alpine-builder .
