@@ -94,15 +94,15 @@ if [ ! -x "$SCRIPTPATH" ]; then
 	exit 1
 fi
 
-printf "Downloading Alpine 3.10.0..." >&2
-if ! wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.0-x86_64.tar.gz; then
+printf "Downloading Alpine 3.10.2..." >&2
+if ! wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.2-x86_64.tar.gz; then
 	echo " Failed!" >&2
 	exit 1
 fi
 echo " Done" >&2
 
 printf "Verifying SHA256 checksum..." >&2
-if ! echo "ec3da7fb5f709a1ce912e6e31fccc5588420c5f1dcecc362c72c989532c1917a  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1; then
+if ! echo "869b1f491d04b712892a4232b2afc24998f05eae4fb114fc6e44f4b1ab67f80c  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1; then
 	echo " Failed!" >&2
 	exit 1
 fi
