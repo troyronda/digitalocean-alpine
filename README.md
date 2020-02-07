@@ -1,6 +1,6 @@
 # Digital Ocean: Alpine Linux
 
-Script to install [Alpine Linux](https://alpinelinux.org/) on a [Digital Ocean](https://m.do.co/c/a0f96edad652) (referral link) droplet.
+Script to install [Alpine Linux](https://alpinelinux.org/) on a Digital Ocean droplet.
 
 ## Instructions
 
@@ -17,6 +17,6 @@ chmod +x digitalocean-alpine.sh
 
 MPL 2.0
 
-## Author
+## Original Author
 
 Tim Cooper (<tim.cooper@layeh.com>)

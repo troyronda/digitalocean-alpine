@@ -10,15 +10,15 @@ if [ "$1" = "--step-chroot" ]; then
 
 	printf "  Installing packages..." >&2
 
-	cat <<EOF > /etc/apk/keys/layeh.com-5b313ebb.rsa.pub
+	cat <<EOF > /etc/apk/keys/troyronda.com-5e2d9b70.rsa.pub
 -----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8OZrGEUMGjd2oAkYb+qu
-rIT7k5FFS5zP6v/YwOOmbT4iQMHlkEP/Aj1PhKZt4FiirFm3fpVKjJa9uPeWRVC4
-eqZ+o9e5xm+2Sb8+Ljn617y2Yzb5kxRyE+1pOuA9WfROZdE+VNvkgcReql6tu19F
-qHj+hwCf3vNsTFeDiiyFKH4UAATR6eolKHGRqk66L3nbRlHvZbODqUcyOeUEXKp7
-ntnM2l6VIxMDHCxbZ9/cu4o/KjW2iT3802D4EWxPT3eksdZERgSVPTJrKskMzey+
-5rqLXTu2NU+V7E+UjQ6hlavc2139CQb3y4smmdpzQTnmUfg281kb9Be0KIDfcOdR
-VwIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvb0Jk9qn6+8Wa/GGmtv+
+glwbOsX5+1FW1m8jl5ZgG26qxir+WobM6PNTGUGxpo+j9tHCFDHXCFT4XcrJJRMc
+U8TPtMqKwxN4u99ziyJ+nGehIEbFpLRzTCHXhayv6I3du5yEU4dCtWGFsVspoU6d
+Y4qDprKyLZnBKEx8NivI5w93s4OCQGUy+re7V2Ftxp6HEUCDpLhKu9ebnl7u+Dy6
+mAhNk0kGBfa3sVf+cpWn1Zmk2mGH5JQ17hmB4PJAXWGFWjjIXcpC29OZRA6Cuac8
+1FxGfW+U00asAgbaZ1KQGTNsLgErmCUjqYL9Ct1zsP0xkE9Hr8vvJH98I1PREWhj
+zwIDAQAB
 -----END PUBLIC KEY-----
 EOF
 	echo "https://cdn.layeh.com/alpine/3.10/" >> /etc/apk/repositories
@@ -94,15 +94,15 @@ if [ ! -x "$SCRIPTPATH" ]; then
 	exit 1
 fi
 
-printf "Downloading Alpine 3.10.2..." >&2
-if ! wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.2-x86_64.tar.gz; then
+printf "Downloading Alpine 3.11.3..." >&2
+if ! wget -q -O /tmp/rootfs.tar.gz http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.3-x86_64.tar.gz; then
 	echo " Failed!" >&2
 	exit 1
 fi
 echo " Done" >&2
 
 printf "Verifying SHA256 checksum..." >&2
-if ! echo "869b1f491d04b712892a4232b2afc24998f05eae4fb114fc6e44f4b1ab67f80c  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1; then
+if ! echo "8a6c827f137058ac3e3df1125891ff5c3b62955f0b911adec26eae6ea2bbb285  /tmp/rootfs.tar.gz" | sha256sum -c >/dev/null 2>&1; then
 	echo " Failed!" >&2
 	exit 1
 fi
