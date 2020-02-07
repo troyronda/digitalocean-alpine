@@ -21,7 +21,7 @@ mAhNk0kGBfa3sVf+cpWn1Zmk2mGH5JQ17hmB4PJAXWGFWjjIXcpC29OZRA6Cuac8
 zwIDAQAB
 -----END PUBLIC KEY-----
 EOF
-	echo "https://cdn.layeh.com/alpine/3.10/" >> /etc/apk/repositories
+	echo "https://github.com/troyronda/digitalocean-alpine/raw/build/repository/3.11/" >> /etc/apk/repositories
 
 	if ! apk add --no-cache alpine-base linux-virt syslinux grub grub-bios e2fsprogs eudev openssh rng-tools rng-tools-openrc digitalocean-alpine >>"$logfile" 2>>"$logfile"; then
 		echo
