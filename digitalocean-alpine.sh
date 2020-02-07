@@ -10,7 +10,7 @@ if [ "$1" = "--step-chroot" ]; then
 
 	printf "  Installing packages..." >&2
 
-	cat <<EOF > /etc/apk/keys/troyronda.com-5e2d9b70.rsa.pub
+	cat <<EOF > /etc/apk/keys/troy@troyronda.com-5e2d9b70.rsa.pub
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvb0Jk9qn6+8Wa/GGmtv+
 glwbOsX5+1FW1m8jl5ZgG26qxir+WobM6PNTGUGxpo+j9tHCFDHXCFT4XcrJJRMc
